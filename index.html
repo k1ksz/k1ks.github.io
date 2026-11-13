@@ -1,1 +1,56 @@
-привет
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Firebase Auth (Google & GitHub)</title>
+</head>
+<body>
+  <h2>Авторизация в Firebase</h2>
+  <button id="google-btn">Войти через Google</button>
+  <button id="github-btn">Войти через GitHub</button>
+  <div id="user-info" style="margin-top: 20px; font-weight: bold;"></div>
+
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+    import { getAuth, signInWithPopup, GoogleAuthProvider, GithubAuthProvider } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+
+    // Конфигурация для вашего проекта github-ef205
+    const firebaseConfig = {
+      apiKey: "ВАШ_API_KEY", // Скопируйте API Key из настроек Firebase
+      authDomain: "github-ef205.firebaseapp.com",
+      projectId: "github-ef205"
+    };
+
+    // Инициализация Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    const userInfoDiv = document.getElementById('user-info');
+
+    // Авторизация Google
+    document.getElementById('google-btn').addEventListener('click', () => {
+      const provider = new GoogleAuthProvider();
+      signInWithPopup(auth, provider)
+        .then((result) => {
+          userInfoDiv.innerText = `Привет, ${result.user.displayName}! (Google)`;
+        })
+        .catch((error) => {
+          userInfoDiv.innerText = `Ошибка Google: ${error.message}`;
+        });
+    });
+
+    // Авторизация GitHub
+    document.getElementById('github-btn').addEventListener('click', () => {
+      const provider = new GithubAuthProvider();
+      signInWithPopup(auth, provider)
+        .then((result) => {
+          userInfoDiv.innerText = `Привет, ${result.user.displayName}! (GitHub)`;
+        })
+        .catch((error) => {
+          userInfoDiv.innerText = `Ошибка GitHub: ${error.message}`;
+        });
+    });
+  </script>
+</body>
+</html>
+
